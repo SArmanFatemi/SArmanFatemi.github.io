@@ -1,22 +1,24 @@
-name: Deploy GitHub Pages
+name: Publish docs to GitHub Pages
 
 on:
   push:
     branches:
       - main # Or your source branch
 
+# Set permissions for GITHUB_TOKEN (default value in action; different tokens may be used too)
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Do not allow multiple concurrent runs, without canceling ongoing ones
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  docs-to-gh-pages:
     runs-on: ubuntu-latest
-
+    name: Documentation to GH Pages
     steps:
-      # Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: actions-gh-pages/action@v4
-        with:
-          branch: main
-          folder: build # Replace with your output folder
+      - uses: emanuelegiona/md-docs-action@v1
